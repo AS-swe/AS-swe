@@ -1,0 +1,53 @@
+import numpy as np
+
+sudoku = [[9,0,0,5,6,0,4,0,0],
+        [0,0,0,0,0,1,0,6,0],
+        [0,5,0,0,0,2,0,0,0],
+        [4,0,0,0,0,0,0,0,7],
+        [0,9,0,3,8,0,0,2,0],
+        [0,0,0,0,0,5,0,0,0],
+        [0,0,8,0,0,0,2,0,0],
+        [0,0,0,0,1,0,0,0,0],
+        [0,3,0,6,9,0,0,8,0]]
+
+##First function we test for possible numbers in square, row and column.
+##Second function solve the sudoku with information fetched from first equation.
+
+##You can always test possible numbers by our test funtion by puting in row, column and number by hand.
+
+def test(row, column, number):
+    ##Put global to get our soduko in to our local funtion.
+    global sudoku
+    ##First try the squares to see for possible solutions, floor division (//) to divide in sections of 3x3.
+    x = (column // 3) * 3
+    y = (row // 3) * 3
+    for i in range(0,3):
+        for j in range(0,3):
+            if sudoku[y+i][x+j] == number:
+                return False
+    ##Test for numbers in columns.
+    for i in range(0,9):
+        if sudoku[row][i] == number:
+            return False
+    ##Test for numbers in row.
+    for i in range(0,9):
+        if sudoku[i][column] == number:
+            return False
+    return True
+    
+def solve():
+    ##Put global to get our sudoku into our local function.
+    global sudoku
+    for row in range(0,9):
+        for column in range(0,9):
+            if sudoku[row][column] == 0:
+                for number in range(1,10):
+                    if test(row, column, number):
+                        sudoku[row][column] = number
+                        solve()
+                        sudoku[row][column] = 0
+                return
+            
+    print(np.matrix(sudoku))
+    input('Test if more solutions, press enter')
+solve()
